@@ -1,6 +1,10 @@
 package main
 
-import "sync"
+import (
+	"bytes"
+	"sync"
+	"text/template"
+)
 
 type Recipient struct {
 	Name  string
@@ -25,4 +29,14 @@ func main() {
 
 	wg.Wait()
 
+}
+
+func executeTemplate(r Recipient) (string, error) {
+	t, err := template.ParseFiles("email.tmpl")
+	if err != nil {
+		return "", err
+	}
+
+	var tpl bytes.Buffer
+	t.Execute(&tpl, r)
 }
