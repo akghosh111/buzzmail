@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func loadRecipient(filePath string) error {
+func loadRecipient(filePath string, ch chan Recipient) error {
 
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -21,6 +21,11 @@ func loadRecipient(filePath string) error {
 
 	for _, record := range records[1:] {
 		fmt.Println(record)
+		// Adding a channel to send data from producer to consumer
+		ch <- Recipient{
+			Name:  record[0],
+			Email: record[1],
+		}
 	}
 
 	return nil
