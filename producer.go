@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"os"
 )
 
@@ -12,6 +11,7 @@ func loadRecipient(filePath string, ch chan Recipient) error {
 	if err != nil {
 		return err
 	}
+	defer f.Close()
 
 	r := csv.NewReader(f)
 	records, err := r.ReadAll()
@@ -20,7 +20,7 @@ func loadRecipient(filePath string, ch chan Recipient) error {
 	}
 
 	for _, record := range records[1:] {
-		fmt.Println(record)
+		// fmt.Println(record)
 		// Adding a channel to send data from producer to consumer
 		ch <- Recipient{
 			Name:  record[0],
