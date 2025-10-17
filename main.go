@@ -1,5 +1,7 @@
 package main
 
+import "sync"
+
 type Recipient struct {
 	Name  string
 	Email string
@@ -13,6 +15,14 @@ func main() {
 		loadRecipient("./emails.csv", recipientChannel)
 	}()
 
-	go emailWorker(1, recipientChannel)
+	var wg sync.WaitGroup
+	workerCount := 5
+
+	for i := 1; i < workerCount; i++ {
+		wg.Add(1)
+		go emailWorker(i, recipientChannel, &wg)
+	}
+
+	wg.Wait()
 
 }
