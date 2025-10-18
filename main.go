@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
+	"html/template"
 	"sync"
-	"text/template"
 )
 
 type Recipient struct {
@@ -38,5 +38,11 @@ func executeTemplate(r Recipient) (string, error) {
 	}
 
 	var tpl bytes.Buffer
-	t.Execute(&tpl, r)
+	err = t.Execute(&tpl, r)
+	if err != nil {
+		return "", err
+	}
+
+	return tpl.String(), nil
+
 }
